@@ -1,0 +1,8 @@
+-------> https://www.smartdraw.com/   					     		| wireframes, use case, diagramma delle classi
+-------> https://learning.oreilly.com/videos/angular-full-app/9781789958829  		| strutturazione e sviluppo della componente grafica con Angular
+-------> https://learning.oreilly.com/library/view/learning-angular-/9781787124929/     | corso iniziale su Angular
+-------> https://firebase.google.com/docs/firestore/					| doc di Firebase
+-------> https://clockify.me/								| clockify
+-------> https://learning.oreilly.com/home/						| O'Reilly
+-------> 	
+------->
