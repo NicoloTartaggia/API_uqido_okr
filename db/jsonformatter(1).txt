@@ -1,0 +1,43 @@
+﻿{
+  "OKRs": {
+    "ID": "string",
+    "begin_date": "timestamp",
+    "end_date": "timestamp",
+    "objectives": [
+      {
+        "creation_date": "timestamp",
+        "description": "string",
+        "keys": [
+          {
+            "ID": "string",
+            "description": "string",
+            "evaluation_type": "string",
+            "insertion_date": "timestamp",
+            "limit": "number",
+            "registered_improvements": [
+              {
+                "description": "string",
+                "insertion_date": "timestamp",
+                "author": "string"
+              }
+            ]
+          },
+          {
+            "ID": "string",
+            "description": "string",
+            "evaluation_type": "string",
+            "insertion_date": "timestamp",
+            "registered_improvements": [
+              {
+                "description": "string",
+                "insertion_date": "timestamp",
+                "author": "string",
+                "checked": "boolean"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

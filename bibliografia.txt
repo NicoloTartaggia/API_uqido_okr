@@ -4,5 +4,5 @@
 -------> https://firebase.google.com/docs/firestore/					| doc di Firebase
 -------> https://clockify.me/								| clockify
 -------> https://learning.oreilly.com/home/						| O'Reilly
--------> 	
-------->
+-------> https://developers.google.com/identity/sign-in/web/sign-in			| Google sign in
+-------> https://firebase.google.com/docs/functions/ 					| cloud functions per Firebase
