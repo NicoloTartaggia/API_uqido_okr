@@ -6,6 +6,7 @@
 -------> https://learning.oreilly.com/home/						| O'Reilly
 -------> https://developers.google.com/identity/sign-in/web/sign-in			| Google sign in
 -------> https://firebase.google.com/docs/functions/ 					| cloud functions per Firebase
+-------> https://medium.com/billie-finanzratgeber/writing-microservices-with-google-cloud-functions-231205d1a94    | cloud functions e microservizi
 
 Installare cors (npm install --save cors)
 Installare express (npm install --save express)
