@@ -8,37 +8,23 @@ const cors = require('cors')({origin: true});
 const objectives  = (req, res) => {
   const result = new Map();
   cors(req, res, () =>{
-    // if(req.query.okrId) {
-      db.collection("objectives").where("okrId", "==", req.query.okrId).get()
-        .then(objList => {
-          const objectiveFinal: Array<{id: string, description: string}> = [];
-          objList.forEach(obj => {
-            result.set(obj.id, obj.data());
-          });
-          result.forEach((v, k) => {
-            objectiveFinal.push({
-              id: k,
-              description: v.description
-            });
-          });
-          res.send(objectiveFinal);
-        })
-        .catch(err => {
-          res.status(404).send(`Error getting document. ${err}`);
+    db.collection("objectives").where("okrId", "==", req.query.okrId).get()
+      .then(objList => {
+        const finalObjective: Array<{id: string, description: string}> = [];
+        objList.forEach(obj => {
+          result.set(obj.id, obj.data());
         });
-    // } else{
-    //   db.collection("objectives").get()
-    //     .then(objList => {
-    //       const result = Array<any>();
-    //       objList.forEach(obj => {
-    //         result.push(obj.id);
-    //       });
-    //       res.send(result);
-    //     })
-    //     .catch(err => {
-    //       res.status(404).send(`Error getting document. ${err}`);
-    //     });
-    // }
+        result.forEach((v, k) => {
+          finalObjective.push({
+            id: k,
+            description: v.description
+          });
+        });
+        res.send(finalObjective);
+      })
+      .catch(err => {
+        res.status(404).send(`Error getting document. ${err}`);
+      });
   });
 };
 

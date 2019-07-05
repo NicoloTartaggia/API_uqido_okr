@@ -9,9 +9,16 @@ const metricsUpdate = (req, res) => {
     db.collection("metrics").doc(req.params[0])
       .update(
         req.body
-      ).then((metric) => {
-        //TODO
-        res.send(metric);
+      // ).then(metric =>{})  // why metric is undefined?
+      // same as metricsCreate
+      ).then(() => {
+        db.collection("metrics").doc(req.params[0]).get()    //another call to db to send back the updated document
+          .then(metric => {
+            res.status(201).send(metric.data());
+          })
+          .catch(err => {
+            res.status(404).send(`Error getting document. ${err}`);
+          });
       })
       .catch(err => {
         res.status(404).send(`Error updating document. ${err}`);

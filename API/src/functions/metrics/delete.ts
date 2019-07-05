@@ -16,7 +16,9 @@ const metricsDelete = (req, res) => {
           res.status(404).send(`Cannot find document ${req.params[0]}`);
         } else{
           docRef.delete()
-            .catch();
+            .catch(err => {
+              res.status(404).send(`Cannot delete document. ${err}`);
+            });
           res.status(200).send(`Document ${req.params[0]} deleted successfully`);
         }
       })
