@@ -9,15 +9,30 @@ const cors = require('cors')({origin: true});
 // @ts-ignore
 const keys = (req, res) => {
   cors(req, res, () =>{
-  db.collection("keys").where("objectiveId","==", req.query.objectiveId).get()
-    .then(keysList => {
-      const result = Array<any>();
-      keysList.forEach((obj: any) => {
-        result.push(obj.data());
+    const keys$ = db.collection("keys").where("objectiveId","==", req.query.objectiveId).get();
+    const metrics$ = db.collection("metrics").get();
+    Promise.all([keys$, metrics$]).then(([keysList, metricsList]) => {
+      const finalKeys = Array<any>();
+      keysList.forEach(key => {
+        let metricsCount = 0;
+        let metrics: any = [];
+        metricsList.forEach(el => {
+          if (el.data()['keyId'] == key.id) {
+            metricsCount += 1;
+            if (key.data()['evaluationType'] === 'check') {
+              metrics.push(el.data());
+            }
+          }
+        });
+        finalKeys.push({
+          ...key.data(),
+          id: key.id,
+          metricsCount: metricsCount,
+          metrics: metrics
+        });
       });
-      res.send(result);
-    })
-    .catch();
+      res.send(finalKeys);
+    }).catch();
   });
 };
 

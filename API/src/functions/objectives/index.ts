@@ -10,17 +10,19 @@ const objectives  = (req, res) => {
   cors(req, res, () =>{
     db.collection("objectives").where("okrId", "==", req.query.okrId).get()
       .then(objList => {
-        const finalObjective: Array<{id: string, description: string}> = [];
+        //console.log(objList);
+        const finalObjectives: Array<{id: string, description: string}> = [];
         objList.forEach(obj => {
           result.set(obj.id, obj.data());
+          console.log(obj.id);
         });
         result.forEach((v, k) => {
-          finalObjective.push({
+          finalObjectives.push({
             id: k,
             description: v.description
           });
         });
-        res.send(finalObjective);
+        res.send(finalObjectives);
       })
       .catch(err => {
         res.status(404).send(`Error getting document. ${err}`);

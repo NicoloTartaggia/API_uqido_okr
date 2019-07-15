@@ -7,7 +7,7 @@ const cors = require('cors')({origin: true});
 const metrics = (req, res) => {
   cors(req, res, () =>{
     db.collection("metrics").where("keyId", "==", req.query.keyId).get()
-      .then(metricsList =>{
+      .then(metricsList => {
         const result = Array<any>();
         metricsList.forEach(metric =>{
           result.push(metric.data());
@@ -21,4 +21,3 @@ const metrics = (req, res) => {
 };
 
 module.exports = metrics;
-
