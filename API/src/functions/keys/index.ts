@@ -15,18 +15,23 @@ const keys = (req, res) => {
       const finalKeys = Array<any>();
       keysList.forEach(key => {
         let metricsCount = 0;
+        let metricsChecked = 0;
         let metrics: any = [];
         metricsList.forEach(el => {
           if (el.data()['keyId'] == key.id) {
             metricsCount += 1;
-            if (key.data()['evaluationType'] === 'check') {
-              metrics.push(el.data());
+            if (key.data()['evaluationType'] === 'check' && el.data()['checked'] === true) {
+                metricsChecked += 1;
             }
+            metrics.push({
+              ...el.data(),
+              id: el.id});
           }
         });
         finalKeys.push({
           ...key.data(),
           id: key.id,
+          metricsChecked: metricsChecked,
           metricsCount: metricsCount,
           metrics: metrics
         });
