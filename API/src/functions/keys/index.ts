@@ -25,7 +25,8 @@ const keys = (req, res) => {
             }
             metrics.push({
               ...el.data(),
-              id: el.id});
+              id: el.id
+            });
           }
         });
         finalKeys.push({

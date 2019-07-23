@@ -9,8 +9,11 @@ const metrics = (req, res) => {
     db.collection("metrics").where("keyId", "==", req.query.keyId).get()
       .then(metricsList => {
         const result = Array<any>();
-        metricsList.forEach(metric =>{
-          result.push(metric.data());
+        metricsList.forEach(metric => {
+          result.push({
+            ...metric.data(),
+            id: metric.id
+          });
         });
         res.send(result);
       })

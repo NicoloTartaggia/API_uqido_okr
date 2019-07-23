@@ -14,7 +14,6 @@ const objectives  = (req, res) => {
         const finalObjectives: Array<{id: string, description: string}> = [];
         objList.forEach(obj => {
           result.set(obj.id, obj.data());
-          console.log(obj.id);
         });
         result.forEach((v, k) => {
           finalObjectives.push({
