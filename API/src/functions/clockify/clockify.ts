@@ -1,12 +1,20 @@
 import * as http from 'https';
 
 const cors = require('cors')({origin: true});
+const CLOCKIFY_BASE_URL = 'https://api.clockify.me/api/v1/';
+const options = {
+  headers: {
+    'x-api-key': 'W1sZgLB5hzV8VkX5'
+  },
+  'Access-Control-Allow-Origin': '*'
+};
+
 
 // @ts-ignore
-const clockifyWorkspaces = (req, res) => {
+const clockify = (req, res) => {
   cors(req, res, () => {
 
-    const mainRequest = http.get('https://api.clockify.me/api/v1/workspaces?name=uqido', {headers: {'x-api-key': 'W1sZgLB5hzV8VkX5'}}, response => {
+    const mainRequest = http.get(`${CLOCKIFY_BASE_URL}workspaces?name=uqido`, options, response => {
       let workspaceData = '';
       response.on('data', (chunk) => {
         workspaceData += chunk;
@@ -15,37 +23,37 @@ const clockifyWorkspaces = (req, res) => {
         const dataParsed = JSON.parse(workspaceData);
         const workspaceId = dataParsed[0].id;
 
-        const projectRequest = http.get(`https://api.clockify.me/api/v1/workspaces/${workspaceId}/projects?name=learning`, {headers: {'x-api-key': 'W1sZgLB5hzV8VkX5'}}, response => {
+        const projectRequest = http.get(`${CLOCKIFY_BASE_URL}workspaces/${workspaceId}/projects?name=learning`, options, projectResponse => {
           let projectData = '';
-          response.on('data', (chunk) => {
+          projectResponse.on('data', (chunk) => {
             projectData += chunk;
           });
-          response.on('end', () => {
-            const dataParsed = JSON.parse(projectData);
+          projectResponse.on('end', () => {
+            const projectDataParsed = JSON.parse(projectData);
             // @ts-ignore
-            const learningProjectId = dataParsed[0].id;
+            const learningProjectId = projectDataParsed[0].id;
 
-            const usersRequest = http.get(`https://api.clockify.me/api/v1/workspace/${workspaceId}/users`, {headers: {'x-api-key': 'W1sZgLB5hzV8VkX5'}}, response => {
+            const usersRequest = http.get(`${CLOCKIFY_BASE_URL}workspace/${workspaceId}/users`, options, usersResponse => {
               let userData = '';
-              response.on('data', (chunk) => {
+              usersResponse.on('data', (chunk) => {
                 userData += chunk;
               });
-              response.on('end', () => {
-                const dataParsed = JSON.parse(userData);
+              usersResponse.on('end', () => {
+                const usersDataParsed = JSON.parse(userData);
                 const users: any = [];
-                dataParsed.forEach((user: any) => {
+                usersDataParsed.forEach((user: any) => {
                   users.push(user.id);
                 });
 
                 const promises: Promise<any>[] = [];
                 users.forEach((user: any) => {
                   const p = new Promise((resolve, reject) => {
-                    const timeEntries = http.get(`https://api.clockify.me/api/v1/workspaces/${workspaceId}/user/${user}/time-entries`, {headers: {'x-api-key': 'W1sZgLB5hzV8VkX5'}}, response => {
+                    const timeEntries = http.get(`${CLOCKIFY_BASE_URL}workspaces/${workspaceId}/user/${user}/time-entries`, options, timeEntriesResponse => {
                       let timeEntriesData = '';
-                      response.on('data', (chunk) => {
+                      timeEntriesResponse.on('data', (chunk) => {
                         timeEntriesData += chunk;
                       });
-                      response.on('end', () => resolve(JSON.parse(timeEntriesData)));
+                      timeEntriesResponse.on('end', () => resolve(JSON.parse(timeEntriesData)));
                     });
                     timeEntries.end();
                   }).then(result => {
@@ -57,7 +65,7 @@ const clockifyWorkspaces = (req, res) => {
                 });
                 Promise.all(promises).then(timeEntriesArray => {
                   res.send(timeEntriesArray);
-                })
+                }).catch(err => console.log(err));
               })
             });
             usersRequest.end();
@@ -70,4 +78,4 @@ const clockifyWorkspaces = (req, res) => {
   });
 };
 
-module.exports = clockifyWorkspaces;
+module.exports = clockify;
