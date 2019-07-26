@@ -4,16 +4,16 @@ const cors = require('cors')({origin: true});
 const CLOCKIFY_BASE_URL = 'https://api.clockify.me/api/v1/';
 const options = {
   headers: {
-    'x-api-key': 'W1sZgLB5hzV8VkX5'
-  },
-  'Access-Control-Allow-Origin': '*'
+    'x-api-key': 'W1sZgLB5hzV8VkX5',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  }
 };
 
 
 // @ts-ignore
 const clockify = (req, res) => {
   cors(req, res, () => {
-
     const mainRequest = http.get(`${CLOCKIFY_BASE_URL}workspaces?name=uqido`, options, response => {
       let workspaceData = '';
       response.on('data', (chunk) => {
@@ -59,12 +59,31 @@ const clockify = (req, res) => {
                   }).then(result => {
                     // @ts-ignore
                     return result.filter((entry: any) => entry.projectId === learningProjectId);
-                  })
-                    .catch(err => console.log(err));
+                  }).catch(err => console.log(err));
                   promises.push(p)
                 });
                 Promise.all(promises).then(timeEntriesArray => {
-                  res.send(timeEntriesArray);
+                  const entries: any = [];
+                  timeEntriesArray.forEach(timeEntries => {
+                    let timeCovered = 0;
+                    let totalUserTime = 0;
+                    const userActivities: any = [];
+                    timeEntries.forEach((timeEntry: any) => {
+                      const startedAt = new Date(timeEntry.timeInterval.start);
+                      if (startedAt.getMonth() === (new Date()).getMonth()) {
+                        const endedAt = new Date(timeEntry.timeInterval.end);
+                        timeCovered += endedAt.getTime() - startedAt.getTime();
+                        totalUserTime += (timeCovered / (1000*60*60))
+                        userActivities.push(timeEntry.description);
+                      }
+                    });
+                    entries.push({
+                      userActivities,
+                      totalUserTime,
+                      average: totalUserTime/8
+                    });
+                  });
+                  res.send(entries);
                 }).catch(err => console.log(err));
               })
             });

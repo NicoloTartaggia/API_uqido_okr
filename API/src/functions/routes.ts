@@ -20,6 +20,7 @@ const metricsUpdate = require("./metrics/update");
 const metricsDelete = require("./metrics/delete");
 const objectives = require("./objectives");
 const okrs = require("./okrs");
+const articles = require("./tech-articles");
 
 module.exports = {
   "clockify": functions.https.onRequest(clockify),
@@ -29,5 +30,6 @@ module.exports = {
   "metricsCreate": functions.https.onRequest(metricsCreate),
   "metricsDelete": functions.https.onRequest(metricsDelete),
   "metricsUpdate": functions.https.onRequest(metricsUpdate),
-  "okrs": functions.https.onRequest(okrs)
+  "okrs": functions.https.onRequest(okrs),
+  "articles": functions.https.onRequest(articles)
 };
