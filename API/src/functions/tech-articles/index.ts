@@ -12,12 +12,12 @@ const options = {
 // @ts-ignore
 const techArticles = (req, res) => {
   cors(req, res, () => {
-    const categoriesRequest = http.get(`${WP_BASE_URL}categories`, options, response => {
+    const categoriesRequest = http.get(`${WP_BASE_URL}categories`, options, getResponse => {
       let categoriesData = '';
-      response.on('data', (chunk) => {
+      getResponse.on('data', (chunk) => {
         categoriesData += chunk;
       });
-      response.on('end', () => {
+      getResponse.on('end', () => {
         const categoriesDataParsed = JSON.parse(categoriesData);
         const categoriesId: any = [];
         categoriesDataParsed.forEach((category: any) => {
@@ -26,12 +26,12 @@ const techArticles = (req, res) => {
         const promises: Promise<any>[] = [];
         categoriesId.forEach((id: any) => {
           const p = new Promise((resolve, reject) => {
-            const postsRequest = http.get(`${WP_BASE_URL}posts?categories=${id}`, options, response => {
+            const postsRequest = http.get(`${WP_BASE_URL}posts?categories=${id}`, options, postResponse => {
               let postsData = '';
-              response.on('data', (chunk) => {
+              postResponse.on('data', (chunk) => {
                 postsData += chunk;
               });
-              response.on('end', () => resolve(JSON.parse(postsData)));
+              postResponse.on('end', () => resolve(JSON.parse(postsData)));
             });
             postsRequest.end();
           }).then(result => {
@@ -47,7 +47,7 @@ const techArticles = (req, res) => {
                 author: "",
                 description: post.title.rendered,
                 createdAt: post.date,
-                keyId: req.params
+                keyId: req.params[0]
               });
               const updateRequest = http.request('https://us-central1-okr-platform.cloudfunctions.net/metricsCreate',
                 {
