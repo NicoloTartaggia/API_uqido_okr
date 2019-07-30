@@ -1,7 +1,7 @@
 import * as http from 'https';
 
 const cors = require('cors')({origin: true});
-const WP_BASE_URL = 'https://tech.uqido.com/wp-json/wp/v2/';
+const WP_BASE_URL = 'https://tech.uqido.com/wp-json/wp/v2/posts?per_page=50&after=2019-07-01T00:00:00';
 const options = {
   headers: {
     'Content-Type': 'application/json',
@@ -12,66 +12,59 @@ const options = {
 // @ts-ignore
 const techArticles = (req, res) => {
   cors(req, res, () => {
-    const categoriesRequest = http.get(`${WP_BASE_URL}categories`, options, getResponse => {
-      let categoriesData = '';
+    const postsRequest = http.get(WP_BASE_URL, options, getResponse => {
+      let postsData = '';
       getResponse.on('data', (chunk) => {
-        categoriesData += chunk;
+        postsData += chunk;
       });
       getResponse.on('end', () => {
-        const categoriesDataParsed = JSON.parse(categoriesData);
-        const categoriesId: any = [];
-        categoriesDataParsed.forEach((category: any) => {
-          categoriesId.push(category.id);
-        });
-        const promises: Promise<any>[] = [];
-        categoriesId.forEach((id: any) => {
-          const p = new Promise((resolve, reject) => {
-            const postsRequest = http.get(`${WP_BASE_URL}posts?categories=${id}`, options, postResponse => {
-              let postsData = '';
-              postResponse.on('data', (chunk) => {
-                postsData += chunk;
-              });
-              postResponse.on('end', () => resolve(JSON.parse(postsData)));
-            });
-            postsRequest.end();
-          }).then(result => {
-            return result;
-          }).catch(err => console.log(err));
-          promises.push(p)
-        });
-        Promise.all(promises).then((postsArray: Array<any[]>) => {
-          const articlesData: any = [];
-          postsArray.forEach((posts: any[]) => {
-            posts.forEach((post: any) => {
-              const data = JSON.stringify({
-                author: "",
-                description: post.title.rendered,
-                createdAt: post.date,
-                keyId: req.params[0]
-              });
-              const updateRequest = http.request('https://us-central1-okr-platform.cloudfunctions.net/metricsCreate',
-                {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': data.length
-                  }
-                }, response => {
-                res.on('end', () => {
-                  console.log(response);
-                });
-              });
-              updateRequest.write(data);
-              updateRequest.end();
-              articlesData.push(data);
-            });
+        const metricsRequest = http.get(`https://us-central1-okr-platform.cloudfunctions.net/metrics?keyId=${req.params[0]}`, metricsResponse => {
+          let metricsData = '';
+          metricsResponse.on('data', (chunk) => {
+            metricsData += chunk;
           });
-          res.send(articlesData);
-        }).catch(err => console.log(err));
+          metricsResponse.on('end', () => {
+            const metricsDataParsed = JSON.parse(metricsData);
+            const postsDataParsed = JSON.parse(postsData);
+            const posts: any = [];
+            postsDataParsed.forEach((post: any) => {
+              const data = {
+                author: '',
+                createdAt: post.date,
+                postId: post.id,
+                description: post.title.rendered,
+                keyId: req.params[0]
+              };
+              posts.push(data);
+              let isPresent = false;
+              metricsDataParsed.forEach((metric: any) => {
+                if (metric.postId === post.id) {
+                  isPresent = true;
+                }
+              });
+              if (!isPresent) {
+                const updateRequest = http.request('https://us-central1-okr-platform.cloudfunctions.net/metricsCreate',
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }, updateResponse => {
+                    res.on('end', () => {
+                      console.log(updateResponse);
+                    });
+                  });
+                updateRequest.write(JSON.stringify(data));
+                updateRequest.end();
+              }
+            });
+            res.send(posts);
+          });
+        });
+        metricsRequest.end();
       });
-    });
-    categoriesRequest.end();
+      postsRequest.end();
+    })
   })
 };
-
 module.exports = techArticles;
