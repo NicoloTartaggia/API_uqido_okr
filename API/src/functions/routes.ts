@@ -12,24 +12,26 @@ firebase.initializeApp({
   appId: "1:331935303484:web:7e38cd831da5d3cd"
 });
 
+const articles = require("./tech-articles");
 const clockify = require("./clockify/clockify");
-const keys = require("./keys");
+const keys = require("./keys/index");
+const keysUpdate = require("./keys/update");
 const metrics = require("./metrics");
 const metricsCreate = require("./metrics/create");
 const metricsUpdate = require("./metrics/update");
 const metricsDelete = require("./metrics/delete");
 const objectives = require("./objectives");
 const okrs = require("./okrs");
-const articles = require("./tech-articles");
 
 module.exports = {
+  "articles": functions.https.onRequest(articles),
   "clockify": functions.https.onRequest(clockify),
   "objectives": functions.https.onRequest(objectives),
   "keys": functions.https.onRequest(keys),
+  "keysUpdate": functions.https.onRequest(keysUpdate),
   "metrics": functions.https.onRequest(metrics),
   "metricsCreate": functions.https.onRequest(metricsCreate),
   "metricsDelete": functions.https.onRequest(metricsDelete),
   "metricsUpdate": functions.https.onRequest(metricsUpdate),
-  "okrs": functions.https.onRequest(okrs),
-  "articles": functions.https.onRequest(articles)
+  "okrs": functions.https.onRequest(okrs)
 };

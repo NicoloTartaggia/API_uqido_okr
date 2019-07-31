@@ -9,8 +9,6 @@ const metricsUpdate = (req, res) => {
     db.collection("metrics").doc(req.params[0])
       .update(
         req.body
-      // ).then(metric =>{})  // why metric is undefined?
-      // same as metricsCreate
       ).then(() => {
         db.collection("metrics").doc(req.params[0]).get()    //another call to db to send back the updated document
           .then(metric => {

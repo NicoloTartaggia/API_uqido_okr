@@ -12,6 +12,22 @@ const options = {
 // @ts-ignore
 const techArticles = (req, res) => {
   cors(req, res, () => {
+    // const diff = 60 * 60 * 24 * 1000;  // milliseconds in a day
+    // if((new Date().getTime() - key.lastUpdate.getTime()) / diff > 7) {
+    //   const keyUpdateRequest = http.request('https://us-central1-okr-platform.cloudfunctions.net/metricsUpdate',
+    //     {
+    //       method: 'PUT',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       }
+    //     }, keyUpdateResponse => {
+    //       res.on('end', () => {
+    //         console.log(keyUpdateResponse);
+    //       });
+    //     });
+    //   keyUpdateRequest.write(JSON.stringify(new Date()));
+    //   keyUpdateRequest.end();
+    // }
     const postsRequest = http.get(WP_BASE_URL, options, getResponse => {
       let postsData = '';
       getResponse.on('data', (chunk) => {
