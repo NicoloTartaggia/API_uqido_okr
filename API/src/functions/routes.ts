@@ -16,12 +16,13 @@ const articles = require("./tech-articles");
 const clockify = require("./clockify/clockify");
 const keys = require("./keys/index");
 const keysUpdate = require("./keys/update");
-const metrics = require("./metrics");
+const metrics = require("./metrics/index");
 const metricsCreate = require("./metrics/create");
 const metricsUpdate = require("./metrics/update");
 const metricsDelete = require("./metrics/delete");
 const objectives = require("./objectives");
-const okrs = require("./okrs");
+const okrs = require("./okrs/index");
+const okrCreate = require("./okrs/create");
 
 module.exports = {
   "articles": functions.https.onRequest(articles),
@@ -33,5 +34,6 @@ module.exports = {
   "metricsCreate": functions.https.onRequest(metricsCreate),
   "metricsDelete": functions.https.onRequest(metricsDelete),
   "metricsUpdate": functions.https.onRequest(metricsUpdate),
-  "okrs": functions.https.onRequest(okrs)
+  "okrs": functions.https.onRequest(okrs),
+  "okrCreate": functions.https.onRequest(okrCreate)
 };
