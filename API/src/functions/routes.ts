@@ -20,20 +20,22 @@ const metrics = require("./metrics/index");
 const metricsCreate = require("./metrics/create");
 const metricsUpdate = require("./metrics/update");
 const metricsDelete = require("./metrics/delete");
-const objectives = require("./objectives");
+const objectives = require("./objectives/index");
+const objectiveCreate = require("./objectives/create");
 const okrs = require("./okrs/index");
 const okrCreate = require("./okrs/create");
 
 module.exports = {
   "articles": functions.https.onRequest(articles),
   "clockify": functions.https.onRequest(clockify),
-  "objectives": functions.https.onRequest(objectives),
   "keys": functions.https.onRequest(keys),
   "keysUpdate": functions.https.onRequest(keysUpdate),
   "metrics": functions.https.onRequest(metrics),
   "metricsCreate": functions.https.onRequest(metricsCreate),
   "metricsDelete": functions.https.onRequest(metricsDelete),
   "metricsUpdate": functions.https.onRequest(metricsUpdate),
+  "objectives": functions.https.onRequest(objectives),
+  "objectiveCreate": functions.https.onRequest(objectiveCreate),
   "okrs": functions.https.onRequest(okrs),
   "okrCreate": functions.https.onRequest(okrCreate)
 };
