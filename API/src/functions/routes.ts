@@ -15,6 +15,7 @@ firebase.initializeApp({
 const articles = require("./tech-articles");
 const clockify = require("./clockify/clockify");
 const keys = require("./keys/index");
+const keysCreate = require("./keys/create");
 const keysUpdate = require("./keys/update");
 const metrics = require("./metrics/index");
 const metricsCreate = require("./metrics/create");
@@ -29,6 +30,7 @@ module.exports = {
   "articles": functions.https.onRequest(articles),
   "clockify": functions.https.onRequest(clockify),
   "keys": functions.https.onRequest(keys),
+  "keysCreate": functions.https.onRequest(keysCreate),
   "keysUpdate": functions.https.onRequest(keysUpdate),
   "metrics": functions.https.onRequest(metrics),
   "metricsCreate": functions.https.onRequest(metricsCreate),
