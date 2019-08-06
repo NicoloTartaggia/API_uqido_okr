@@ -10,15 +10,15 @@ const objectives  = (req, res) => {
   cors(req, res, () =>{
     db.collection("objectives").where("okrId", "==", req.query.okrId).get()
       .then(objList => {
-        //console.log(objList);
-        const finalObjectives: Array<{id: string, description: string}> = [];
+        const finalObjectives: Array<any> = [];
         objList.forEach(obj => {
           result.set(obj.id, obj.data());
         });
         result.forEach((v, k) => {
           finalObjectives.push({
             id: k,
-            description: v.description
+            description: v.description,
+            okrId: v.okrId
           });
         });
         res.send(finalObjectives);

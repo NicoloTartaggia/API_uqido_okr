@@ -11,7 +11,10 @@ const objectiveCreate = (req, res) => {
     ).then(resource => {
       db.collection("objectives").doc(resource.id).get()
         .then(objective => {
-          res.status(201).send(objective.data());
+          res.status(201).send({
+            ...objective.data(),
+            id: objective.id
+          });
         })
         .catch(err => {
           res.status(404).send(`Error getting document. ${err}`);

@@ -10,7 +10,6 @@ const options = {
   }
 };
 
-
 // @ts-ignore
 const clockify = (req, res) => {
   cors(req, res, () => {
