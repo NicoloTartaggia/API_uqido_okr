@@ -24,6 +24,7 @@ const metricsUpdate = require("./metrics/update");
 const metricsDelete = require("./metrics/delete");
 const objectives = require("./objectives/index");
 const objectiveCreate = require("./objectives/create");
+const objectiveDelete = require("./objectives/delete");
 const okrs = require("./okrs/index");
 const okrCreate = require("./okrs/create");
 
@@ -40,6 +41,7 @@ module.exports = {
   "metricsUpdate": functions.https.onRequest(metricsUpdate),
   "objectives": functions.https.onRequest(objectives),
   "objectiveCreate": functions.https.onRequest(objectiveCreate),
+  "objectivesDelete": functions.https.onRequest(objectiveDelete),
   "okrs": functions.https.onRequest(okrs),
   "okrCreate": functions.https.onRequest(okrCreate)
 };
