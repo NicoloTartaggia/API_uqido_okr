@@ -12,19 +12,19 @@ const keysCreate = (req, res) => {
       key
     ).then(resource => {
       metrics.forEach((metric: any) => {
-        metric = {
+        const metricBody = {
           ...metric,
           keyId: resource.id
         };
         db.collection("metrics").add(
-          metric
+          metricBody
         ).catch(err => {
           res.status(400).send(`Error adding metric. ${err}`);
         });
       });
       db.collection("keys").doc(resource.id).get()
-        .then(key => {
-          res.status(201).send(key.data());
+        .then(keyResult => {
+          res.status(201).send(keyResult.data());
         })
         .catch(err => {
           res.status(404).send(`Error getting document. ${err}`);

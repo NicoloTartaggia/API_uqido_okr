@@ -16,6 +16,7 @@ const articles = require("./tech-articles");
 const clockify = require("./clockify/clockify");
 const keys = require("./keys/index");
 const keysCreate = require("./keys/create");
+const keysDelete = require("./keys/delete");
 const keysUpdate = require("./keys/update");
 const metrics = require("./metrics/index");
 const metricsCreate = require("./metrics/create");
@@ -31,6 +32,7 @@ module.exports = {
   "clockify": functions.https.onRequest(clockify),
   "keys": functions.https.onRequest(keys),
   "keysCreate": functions.https.onRequest(keysCreate),
+  "keysDelete": functions.https.onRequest(keysDelete),
   "keysUpdate": functions.https.onRequest(keysUpdate),
   "metrics": functions.https.onRequest(metrics),
   "metricsCreate": functions.https.onRequest(metricsCreate),

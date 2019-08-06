@@ -6,9 +6,9 @@ const cors = require('cors')({origin: true});
 //DELETE request
 //Delete document data in metrics collection if it exists.
 // @ts-ignore
-const metricsDelete = (req, res) => {
+const keysDelete = (req, res) => {
   cors(req, res, () =>{
-    const docRef = db.collection("metrics").doc(req.params[0]);
+    const docRef = db.collection("keys").doc(req.params[0]);
     docRef.get()
       .then(doc => {
         if(!doc.exists) {
@@ -27,4 +27,4 @@ const metricsDelete = (req, res) => {
   });
 };
 
-module.exports = metricsDelete;
+module.exports = keysDelete;
