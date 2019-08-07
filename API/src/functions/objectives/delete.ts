@@ -17,10 +17,10 @@ const objectivesDelete = (req, res) => {
             keys.forEach(key => {
               const keyRef = db.collection("keys").doc(key.id);
               keyRef.get().then(keyDoc => {
-                db.collection("metric").where("keyId", "==", keyDoc.id).get()
+                db.collection("metrics").where("keyId", "==", keyDoc.id).get()
                   .then(metrics => {
                     metrics.forEach(metric => {
-                      const metricRef = db.collection("metric").doc(metric.id);
+                      const metricRef = db.collection("metrics").doc(metric.id);
                       metricRef.get().then(metricDoc => {
                         metricRef.delete()
                           .catch(err => {
