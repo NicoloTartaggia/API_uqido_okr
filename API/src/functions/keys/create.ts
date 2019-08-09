@@ -28,10 +28,6 @@ const keysCreate = (req, res) => {
                 ...metric,
                   id: metricResult.id
               })
-              // metricsToSendBack.push({
-              //   ...metric,
-              //   id: metricResult.id
-              // })
             })
             .catch(err => {
               res.status(400).send(`Error adding metric. ${err}`);

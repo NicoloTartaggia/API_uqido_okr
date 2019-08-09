@@ -62,6 +62,7 @@ const clockify = (req, res) => {
                   promises.push(p)
                 });
                 Promise.all(promises).then(timeEntriesArray => {
+
                   const entries: any = [];
                   timeEntriesArray.forEach(timeEntries => {
                     let timeCovered = 0;
@@ -69,11 +70,14 @@ const clockify = (req, res) => {
                     const userActivities: any = [];
                     timeEntries.forEach((timeEntry: any) => {
                       const startedAt = new Date(timeEntry.timeInterval.start);
-                      if (startedAt.getMonth() === (new Date()).getMonth()) {
+                      if (startedAt.getTime() >= req.query.startedAt) {
                         const endedAt = new Date(timeEntry.timeInterval.end);
                         timeCovered += endedAt.getTime() - startedAt.getTime();
-                        totalUserTime += (timeCovered / (1000*60*60))
-                        userActivities.push(timeEntry.description);
+                        totalUserTime += (timeCovered / (1000*60*60));
+                        userActivities.push({
+                          description: timeEntry.description,
+                          timeInterval: timeEntry.timeInterval
+                        });
                       }
                     });
                     entries.push({
